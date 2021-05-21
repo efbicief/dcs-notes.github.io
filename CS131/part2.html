@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+
+<head>
+
+    
+    <meta charset="UTF-8"><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- Include tocNAV javascript -->
+    <script type="text/javascript" src="/dcs-notes.github.io/assets/js/tocNav.js"></script>
+
+    <!-- seo used to be here -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style"
+        type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/dcs-notes.github.io/assets/css/style.css">
+</head>
+
+<body>
+    <div id="mainGrid" class="container">
+        <header style="padding:10px;" class="page-header notes-header" role="banner">
+            <h1 class="project-name">Linear algebra and Matrices</h1>
+        </header>
+        <div title="Table of Contents" class="buttonCol" onclick="toggleNav()">
+            <div class="navArrow">
+                <i></i>
+            </div>
+        </div>
+        <div class="navBox">
+            <div id="sidenav" class="sideNav closedNav">
+                <h2 style="margin-left: 10px;">Table of Contents</h2><ul><li><a href="#linear-algebra">Linear algebra</a><ul><li><a href="#vectors">Vectors</a><ul><li><a href="#modulus">Modulus</a></li><li><a href="#dot-product">Dot product</a></li></ul></li><li><a href="#linear-combinations-and-subspaces">Linear combinations and subspaces</a><ul><li><a href="#linear-combination-definition">Linear combination definition</a></li><li><a href="#span-definition">Span definition</a></li><li><a href="#subspace-definition">Subspace definition</a></li></ul></li><li><a href="#linear-independence">Linear independence</a><ul><li><a href="#linear-independence-definition">Linear independence definition</a></li><li><a href="#linear-dependence-definition">Linear dependence definition</a></li><li><a href="#checking-for-linear-independence">Checking for linear independence</a></li></ul></li><li><a href="#basis-and-dimension">Basis and dimension</a><ul><li><a href="#basis-definition">Basis definition</a><ul><li><a href="#standard-basis">Standard basis</a></li></ul></li><li><a href="#constructing-bases">Constructing bases</a></li><li><a href="#dimension-definition">Dimension definition</a></li></ul></li></ul></li><li><a href="#matrices">Matrices</a><ul><li><a href="#matrix-algebra">Matrix algebra</a></li><li><a href="#matrix-inverses">Matrix inverses</a></li><li><a href="#linear-equations">Linear equations</a></li><li><a href="#determinants-notes-1-notes-2acukfacscidcsteachingmaterialcs131part2note11pdf">Determinants (Notes #1, [Notes #2]ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note11.pdf))</a></li><li><a href="#linear-transformations--notes-1-notes-2acukfacscidcsteachingmaterialcs131part2note13pdf">Linear transformations  (Notes #1, [Notes #2]ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note13.pdf))</a></li><li><a href="#eigenvalues-and-eigenvectors">Eigenvalues and eigenvectors</a></li></ul></li></ul>
+</div>
+        </div>
+        
+        <div class="contents">
+            <main id="content" class="main-content" role="main">
+                <div class="partNav"><a href="/dcs-notes.github.io/CS131/part1.html" title="Number systems">👈Prev</a><a href="./" title="CS131 Home">🏡CS131</a><a href="/dcs-notes.github.io/CS131/part3.html" title="Sequences and Series">Next👉</a></div>
+                <!-- Main Content of markdown or sub-layouts-->
+                <!-- Each module has its own layout to allow module layouts to be customised -->
+<!-- The layout name is also used by the notes layout to display the correct module code -->
+
+<h1 id="linear-algebra">Linear algebra</h1>
+
+<h2 id="vectors"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note4.pdf">Vectors</a></h2>
+
+<p><em>Pull request if you want to complete this</em></p>
+
+<h3 id="modulus">Modulus</h3>
+
+<p>The “modulus” of a vector denotes its length, and is calculated as follows:
+\(\| \underline{x} \| = \sqrt{(x_1)^2 + (x_2)^2 + ... + (x_n)^2}\)
+A vector is called a unit vector of its modulus is \(1\)</p>
+
+<h3 id="dot-product">Dot product</h3>
+
+<p>The dot product of two vectors is defined as:
+\(\underline{a} . \underline{b} = a_1 b_1 + a_2 b_2 + ... + a_n b_n\)
+It has the additional property:
+\(\underline{a} . \underline{b} = \|\underline{a}\| \|\underline{b}\| cos \theta\)
+Which can be used to find the angle between to vectors.</p>
+
+<p>Hence, if the dot product is zero, then the vectors are orthogonal</p>
+
+<h2 id="linear-combinations-and-subspaces"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note5.pdf">Linear combinations and subspaces</a></h2>
+
+<h3 id="linear-combination-definition">Linear combination definition</h3>
+
+<p>Given the vectors \(\underline{u_1}, \underline{u_2}, ..., \underline{u_m} \in \mathbb{R}^n\) and \(\alpha_1, \alpha_2, ..., \alpha_m \in \mathbb{R}\), a vector of the form \(\alpha_1 \underline{u_1} + \alpha_2 \underline{u_2} + ... + \alpha_m \underline{u_m}\) is called a linear combination of the vectors</p>
+
+<h3 id="span-definition">Span definition</h3>
+
+<p>Give the set of vectors \(U = \{\underline{u_1}, \underline{u_2}, ..., \underline{u_m}\}\), with each \(\underline{u_k} \in \mathbb{R}^n, \forall k\), then the span of \(U\) is the set of all linear combinations of the vectors in \(U\). This can be written as:
+\(span(U) = \{
+	\alpha_1 \underline{u_1} + \alpha_2 \underline{u_2} + ... + \alpha_m \underline{u_m}
+	\ \|\ 
+	\alpha_1, \alpha_2, ..., \alpha_m \in \mathbb{R}
+\}\)</p>
+
+<h3 id="subspace-definition">Subspace definition</h3>
+
+<p>A subspace of \(\mathbb{R}^n\) is a non-empty subset \(S\) of \(\mathbb{R}^n\) with the two properties:</p>
+
+<ol>
+  <li><strong>Closure under addition:</strong> \(\underline{u}, \underline{v} \in S \implies \underline{u} + \underline{v} \in S\)</li>
+  <li><strong>Closure under scalar multiplication:</strong> \(\underline{u} \in S, \lambda \in \mathbb{R} \implies \lambda \underline{u} \in S\)</li>
+</ol>
+
+<p>They then follow the properties:</p>
+
+<ol>
+  <li>Every subspace in \(\mathbb{R}^n\) contains the zero vector</li>
+  <li>If \(U\) is a non-empty finite subset of \(\mathbb{R}^n\) then the span of \(U\) is a subspace of \(\mathbb{R}^n\) and is called a subspace “spanned” by \(U\)</li>
+</ol>
+
+<h2 id="linear-independence"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note6.pdf">Linear independence</a></h2>
+
+<h3 id="linear-independence-definition">Linear independence definition</h3>
+
+<p>A set of vectors is linearly independent if they cannot be expressed as a linear combination equally zero, unless all of the factors are zero
+\(\alpha_1 \underline{u_1} + \alpha_2 \underline{u_2} + ... + \alpha_m \underline{u_m} = \underline{0} \implies \alpha_i = 0, \forall i \in {1, 2, ..., m}\)</p>
+
+<h3 id="linear-dependence-definition">Linear dependence definition</h3>
+
+<p>Linear dependence is not linear independence, i.e. the zero vector can be expressed as a linear combination of the vectors</p>
+
+<h3 id="checking-for-linear-independence">Checking for linear independence</h3>
+
+<p>Two ways:</p>
+
+<ol>
+  <li>Form a system of equations, with the nth equation having the nth value in each vector</li>
+  <li>A set of non-zero vectors is linearly dependent iff some \(\underline{u_r}\) is a linear combination of its predecessors \(\underline{u_1}, ..., \underline{u_{r-1}}\), so showing this shows linear dependence</li>
+</ol>
+
+<h2 id="basis-and-dimension"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note7.pdf">Basis and dimension</a></h2>
+
+<h3 id="basis-definition">Basis definition</h3>
+
+<p>Given a subspace \(S\) of \(\mathbb{R}^n\), a set of vectors is called a bases of \(S\) if it is a linearly independent set which spans \(S\).</p>
+
+<p>The number of items in \(S\) cannot exceed \(n\) if it is a basis, as it must then be linearly dependent</p>
+
+<h4 id="standard-basis">Standard basis</h4>
+
+<p>The standard basis is vectors with a one each column, and zeroes in the rest, for example for \(\mathbb{R}^3\):</p>
+
+<ul>
+  <li>
+\[v_1 = \{1,0,0\}\]
+  </li>
+  <li>
+\[v_2 = \{0,1,0\}\]
+  </li>
+  <li>
+\[v_3 = \{0,0,1\}\]
+  </li>
+</ul>
+
+<h3 id="constructing-bases">Constructing bases</h3>
+
+<p>Let \(\{\underline{v_1}, \underline{v_2}, ..., \underline{v_m}\}\) be a set of nonzero vectors that spans a subspace \(S\) of \(\mathbb{R}^n\). Then, removing each \(\underline{v_i}\) which is a linear combination of its predecessors will leave a bases for \(S\)</p>
+
+<h3 id="dimension-definition">Dimension definition</h3>
+
+<p>The dimension of a subspace is the minimum number of vectors needed for a basis of the subspace</p>
+
+<h1 id="matrices">Matrices</h1>
+
+<h2 id="matrix-algebra"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note8.pdf">Matrix algebra</a></h2>
+
+<ul>
+  <li>Properties of scalar multiplication and addition</li>
+  <li>Matrix multiplication
+    <ul>
+      <li>Properties</li>
+    </ul>
+  </li>
+  <li>Types of matrix
+    <ul>
+      <li>Diagonal</li>
+      <li>Identity</li>
+    </ul>
+  </li>
+  <li>Matrix transposes</li>
+</ul>
+
+<h2 id="matrix-inverses"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note8.pdf">Matrix inverses</a></h2>
+
+<ul>
+  <li>Definition</li>
+</ul>
+
+<h2 id="linear-equations"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note9.pdf">Linear equations</a></h2>
+
+<ul>
+  <li>Expressing sets of linear equations as matrices</li>
+  <li>Elementary row operations
+    <ul>
+      <li>Use to find inverses</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="determinants-notes-1-notes-2acukfacscidcsteachingmaterialcs131part2note11pdf">Determinants (<a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note10.pdf">Notes #1</a>, [Notes #2]ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note11.pdf))</h2>
+
+<ul>
+  <li>Definition</li>
+  <li>Elementary row operations effect on determinants</li>
+  <li><a href="https://www.wikiwand.com/en/Adjugate_matrix">Adjoint/adjugant matrices</a></li>
+  <li>Matrix inverse only well-defined if determinant is non-zero</li>
+  <li>Inverse from determinant and adjugant</li>
+  <li>Linear independence from matrix determinant</li>
+</ul>
+
+<h2 id="linear-transformations--notes-1-notes-2acukfacscidcsteachingmaterialcs131part2note13pdf">Linear transformations  (<a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note12.pdf">Notes #1</a>, [Notes #2]ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note13.pdf))</h2>
+
+<ul>
+  <li>Definition
+    <ul>
+      <li>Properties</li>
+    </ul>
+  </li>
+  <li>Matrix define linear transformations</li>
+  <li>Change of basis</li>
+  <li></li>
+</ul>
+
+<h2 id="eigenvalues-and-eigenvectors"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part2/note14.pdf">Eigenvalues and eigenvectors</a></h2>
+
+<ul>
+  <li>Definitions</li>
+  <li>Complex values</li>
+  <li>Diagonalising matrices</li>
+</ul>
+
+
+                
+                <footer class="site-footer">
+                    
+                    <span class="site-footer-owner"><a href="https://github.com/CSRG-Group/dcs-notes.github.io">dcs-notes.github.io</a> is maintained by <a href="https://github.com/CSRG-Group">CSRG-Group</a>.</span>
+                    
+                </footer>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

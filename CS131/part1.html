@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+
+<head>
+
+    
+    <meta charset="UTF-8"><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- Include tocNAV javascript -->
+    <script type="text/javascript" src="/dcs-notes.github.io/assets/js/tocNav.js"></script>
+
+    <!-- seo used to be here -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style"
+        type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/dcs-notes.github.io/assets/css/style.css">
+</head>
+
+<body>
+    <div id="mainGrid" class="container">
+        <header style="padding:10px;" class="page-header notes-header" role="banner">
+            <h1 class="project-name">Number systems</h1>
+        </header>
+        <div title="Table of Contents" class="buttonCol" onclick="toggleNav()">
+            <div class="navArrow">
+                <i></i>
+            </div>
+        </div>
+        <div class="navBox">
+            <div id="sidenav" class="sideNav closedNav">
+                <h2 style="margin-left: 10px;">Table of Contents</h2><ul><li><a href="#number-systems">Number systems</a><ul><li><a href="#integers">Integers</a><ul><li><a href="#base-conversion-algorithms">Base conversion algorithms</a></li><li><a href="#the-division-algorithm">The division algorithm</a></li><li><a href="#the-euclidean-algorithm">The Euclidean algorithm</a><ul><li><a href="#bézouts-identity">Bézout’s identity</a></li></ul></li><li><a href="#modular-arithmetic">Modular arithmetic</a></li></ul></li><li><a href="#real-numbers">Real numbers</a><ul><li><a href="#axioms-of-the-real-number-system">Axioms of the real number system</a></li><li><a href="#intervals-meaning">Intervals meaning</a></li><li><a href="#roots">Roots</a></li><li><a href="#modulus">Modulus</a></li><li><a href="#upperlower-bounds-infimum-supremum">Upper/lower bounds, infimum, supremum</a></li><li><a href="#completeness-axiom">Completeness axiom</a></li></ul></li><li><a href="#complex-numbers">Complex numbers</a></li></ul></li></ul>
+</div>
+        </div>
+        
+        <div class="contents">
+            <main id="content" class="main-content" role="main">
+                <div class="partNav"><a href="./" title="CS131 Home">🏡CS131</a><a href="/dcs-notes.github.io/CS131/part2.html" title="Linear algebra and Matrices">Next👉</a></div>
+                <!-- Main Content of markdown or sub-layouts-->
+                <!-- Each module has its own layout to allow module layouts to be customised -->
+<!-- The layout name is also used by the notes layout to display the correct module code -->
+
+<h1 id="number-systems">Number systems</h1>
+
+<h2 id="integers"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part1/note1.pdf">Integers</a></h2>
+
+<h3 id="base-conversion-algorithms">Base conversion algorithms</h3>
+
+<p>To convert between two arbitrary bases, with the target base being \(b &gt; 1, b \in \mathbb{Z}\), and the number to convert \(x\)</p>
+
+<blockquote>
+  <p>Repeatedly divide \(x\) by \(b\), converting the remainders \(r_1, r_2, ..., r_n\) to digits in base \(b\)</p>
+
+  <p>The base \(b\) representation is then \(r_n\ r_{n-1}\ ...\ r_2\ r_1\)</p>
+</blockquote>
+
+<h3 id="the-division-algorithm">The division algorithm</h3>
+
+<blockquote>
+  <p>If \(a, b \in \mathbb{Z}\) with \(b \neq 0\), then there are unique numbers \(q, r \in \mathbb{Z}\) such that:</p>
+
+  <table>
+    <tbody>
+      <tr>
+        <td>​		\(a = qb + r\), and $$0 \leq r\leq</td>
+        <td>b</td>
+        <td>$$</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Where \(q\) is called the quotient, and \(r\) the remainder</p>
+</blockquote>
+
+<h3 id="the-euclidean-algorithm">The Euclidean algorithm</h3>
+
+<p>The <strong>Euclidean algorithm</strong> makes use of repeated division to calculate the greatest common divisor of two integers:</p>
+
+<p>We can write it in a number of mathematical ways. Let \(r_0\) and \(r_1\) be integers, with \(0 &lt; r_1 &lt; r_0\):</p>
+
+<ol>
+  <li>
+    <blockquote>
+      <p>For each \(i\)</p>
+
+      <p>Let \(r_{i+1}\) be the remainder of \(r_{i-1}\) when divided by \(r_i\)</p>
+
+      <p>If \(r_{i+1}\) is zero, then \(r_i\) is the greatest common divisor of \(r_0\) and \(r_1\)</p>
+    </blockquote>
+  </li>
+  <li>
+    <blockquote>
+      <p>We can write the relation \(r_{i-1} = q_i \cdot r_i + r_{i+1}, (1 \leq i \leq N)\) to write the last non-zero remainder, which is the greatest common factor, in terms of \(r_0\) and \(r_1\)</p>
+
+      <p>\(gcd(r_1, r_0) = x \cdot r_1 + y \cdot r_0\) for some integers \(x\) and \(y\)</p>
+    </blockquote>
+  </li>
+</ol>
+
+<p>Or as pseudocode:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Let a &lt;- the larger number to find the gcd of (r_0 above)
+Let b &lt;- the smaller number to find the gcd of (r_1 above)
+Repeat
+	Let r &lt;- the remainder of a divided by b
+	Let a &lt;- b
+	Let b &lt;- r
+Until r = 0
+Report the new value of b as the greatest common divisor
+</code></pre></div></div>
+
+<p><a href="https://sites.math.rutgers.edu/~greenfie/gs2004/euclid.html">Additional source</a></p>
+
+<h4 id="bézouts-identity">Bézout’s identity</h4>
+
+<blockquote>
+  <p>Let \(a\) and \(b\) be numbers with a greatest common divisor \(d\)</p>
+
+  <p>There exist two integers \(x\) and \(y\) such that \(a \cdot x + b \cdot y = d\)</p>
+
+  <p>More generally, the integers of the form \(a \cdot x + b \cdot y\) are exactly multiples of \(d\)</p>
+</blockquote>
+
+<h3 id="modular-arithmetic">Modular arithmetic</h3>
+
+<p>Let \(n\) be an integer greater than \(1\). We say that two integers \(a\) and \(b\) are congruent modulo \(n\) and write \(a\equiv b\ mod\ n\) or \(a \cdot n≡b\), if \(a−b\) is an integer multiple of \(n\), i.e. \(a=b+kn\) where \(k\) is an integer.</p>
+
+<p><em>Add properties of modular arithmetic - possibly copy from 140</em></p>
+
+<h2 id="real-numbers"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part1/note2.pdf">Real numbers</a></h2>
+
+<h3 id="axioms-of-the-real-number-system">Axioms of the real number system</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Definition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Commutativity</td>
+      <td>\(x+y=y+x\) and \(x \cdot y = y \cdot x\)</td>
+    </tr>
+    <tr>
+      <td>Associativity</td>
+      <td>\(x+(y+z) = (x+y)+z\) and \(x+(y+z) = (x \cdot y) \cdot z\)</td>
+    </tr>
+    <tr>
+      <td>Distributivity of $\cdot$ over \(+\)</td>
+      <td>\(x \cdot (y+z) = x \cdot y + x \cdot z\)</td>
+    </tr>
+    <tr>
+      <td>Existence of the additive identity</td>
+      <td>\(\exists 0 \in \mathbb{R}, x + 0 = x\)</td>
+    </tr>
+    <tr>
+      <td>Existence of the multiplicative identity</td>
+      <td>\(\exists 1 \in \mathbb{R}, x \cdot 1 = x\)</td>
+    </tr>
+    <tr>
+      <td>Additive and multiplicative identities are distinct</td>
+      <td>\(1 \neq 0\)</td>
+    </tr>
+    <tr>
+      <td>Every element has an additive inverse</td>
+      <td>\(\exists (-x) \in \mathbb{R}, x + (-x) = 0\)</td>
+    </tr>
+    <tr>
+      <td>Every non-zero element has a multiplicative inverse</td>
+      <td>If \(x \neq 0\), then \(\exists x^{-1} \in \mathbb{R}, x \cdot x^{-1} = 1\)</td>
+    </tr>
+    <tr>
+      <td>Transitivity of ordering</td>
+      <td>If \(x&lt;y\) and \(y&lt;z\), then \(x&lt;z\)</td>
+    </tr>
+    <tr>
+      <td>The trichotomy law</td>
+      <td>Exactly one of the following is true: $x&lt;y$, $x=y$, $x&gt;y$</td>
+    </tr>
+    <tr>
+      <td>Preservation of ordering under addition</td>
+      <td>If \(x&lt;y\), then \(x+z &lt; y+z\)</td>
+    </tr>
+    <tr>
+      <td>Preservation of ordering under multiplication</td>
+      <td>If \(z &gt; 0\) and \(x&lt;y\), then $x \cdot z &lt; y \cdot z$</td>
+    </tr>
+    <tr>
+      <td>Completeness</td>
+      <td>Every non-empty subset of \(\mathbb{R}\) that is bounded above has a least upper bound</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="intervals-meaning">Intervals meaning</h3>
+
+<ul>
+  <li>’’ \([\) ‘’ means that the number it is adjacent to is included in the interval</li>
+  <li>” \()\) “ means that the number it is adjacent to is excluded from the interval</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>For example, $$[a,b) = {x\</td>
+      <td>\ a &lt; x &lt; b}$$</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="roots">Roots</h3>
+
+<p>Definition and properties</p>
+
+<ul>
+  <li>
+\[x^2 = a \Longleftrightarrow \pm \sqrt{a}\]
+    <ul>
+      <li>
+\[x^{2n} = a \Longleftrightarrow \pm \sqrt[2n]{a}\]
+      </li>
+      <li>
+\[x^{2n+1} = a \Longleftrightarrow \sqrt[2n+1]{a}\]
+      </li>
+    </ul>
+  </li>
+  <li>
+\[a &lt; b \Longleftrightarrow a^{\frac{1}{n}} &lt; b^{\frac{1}{n}}\]
+  </li>
+</ul>
+
+<h3 id="modulus">Modulus</h3>
+
+<p>If \(x \geq 0\), then \(\|x\| = x\), else \(\|x\| = -x\)</p>
+
+<ul>
+  <li>Hence, \(\|x\| \geq 0, \forall x\)</li>
+</ul>
+
+<p>Properties</p>
+
+<h3 id="upperlower-bounds-infimum-supremum">Upper/lower bounds, infimum, supremum</h3>
+
+<p>Let \(S\) be a set of real numbers</p>
+
+<ul>
+  <li>A real number \(u\) is called an <em>upper bound</em> of \(S\) if \(x \leq u, \forall x \in S\)</li>
+  <li>A real number \(l\) is called a <em>lower bound</em> of \(S\) if \(l \leq x, \forall x \in S\)</li>
+  <li>A real number \(U\) is called the <em>least upper bound (supremum)</em> of \(S\) if it is an upper bound of \(S\), and \(U \leq u\) for every upper bound \(u\) of \(S\)</li>
+  <li>A real number \(L\) is called the <em>greatest lower bound (infimum)</em> of \(S\) if it is an upper bound of \(S\), and \(l \leq L\) for every lower bound \(l\) of \(S\)</li>
+</ul>
+
+<h3 id="completeness-axiom">Completeness axiom</h3>
+
+<p>The <em>infimum</em> and <em>supremum</em> do not necessarily exist, however, the completeness axiom states:</p>
+
+<blockquote>
+  <p>Every non-empty set of real numbers which has an upper bound has a least upper bound.</p>
+
+  <p>From this we can show also that every non-empty set of real numbers which has a lower bound has a greatest lower bound</p>
+</blockquote>
+
+<p>This has the consequences:</p>
+
+<ul>
+  <li><strong>The Archimedean property of \(\mathbb{R}\)</strong>:
+If \(\epsilon &gt; 0 \in \mathbb{R}\) , then \(\exists n&gt;0 \in \mathbb{R}\) with $n \cdot \epsilon &gt; 1$</li>
+  <li>Between two distinct real numbers, there are always both rational and irrational numbers</li>
+  <li>Every real number can be expressed as a (possibly infinite) decimal expansion</li>
+</ul>
+
+<h2 id="complex-numbers"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part1/note3.pdf">Complex numbers</a></h2>
+
+<ul>
+  <li>Complex conjugation</li>
+  <li>Modulus (length) properties</li>
+  <li>De Moivre’s</li>
+  <li>Fundamental theorem of algebra</li>
+  <li>Discrimants</li>
+</ul>
+
+
+                
+                <footer class="site-footer">
+                    
+                    <span class="site-footer-owner"><a href="https://github.com/CSRG-Group/dcs-notes.github.io">dcs-notes.github.io</a> is maintained by <a href="https://github.com/CSRG-Group">CSRG-Group</a>.</span>
+                    
+                </footer>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

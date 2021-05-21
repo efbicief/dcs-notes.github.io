@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+
+<head>
+
+    
+    <meta charset="UTF-8"><!-- Include tocNAV javascript -->
+    <script type="text/javascript" src="/dcs-notes.github.io/assets/js/tocNav.js"></script>
+
+    <!-- seo used to be here -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style"
+        type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/dcs-notes.github.io/assets/css/style.css">
+</head>
+
+<body>
+    <div id="mainGrid" class="container">
+        <header style="padding:10px;" class="page-header notes-header" role="banner">
+            <h1 class="project-name">General Functional Programming</h1>
+        </header>
+        <div title="Table of Contents" class="buttonCol" onclick="toggleNav()">
+            <div class="navArrow">
+                <i></i>
+            </div>
+        </div>
+        <div class="navBox">
+            <div id="sidenav" class="sideNav closedNav">
+                <h2 style="margin-left: 10px;">Table of Contents</h2><ul><li><a href="#imperative-vs-functional">Imperative vs Functional</a></li><li><a href="#the-compiler">The Compiler</a></li><li><a href="#currying">Currying</a><ul><li><a href="#uncurry">Uncurry</a></li></ul></li><li><a href="#list-comprehension">List comprehension</a></li><li><a href="#type-classes">Type Classes</a><ul><li><a href="#type-class-definitions">Type Class Definitions</a></li><li><a href="#type-instance">Type Instance</a><ul><li><a href="#constraints-on-instances">Constraints on instances</a></li></ul></li><li><a href="#superclass-constraints">Superclass Constraints</a></li></ul></li><li><a href="#polymorphism">Polymorphism</a><ul><li><a href="#parametric-polymorphism">Parametric polymorphism</a></li><li><a href="#ad-hoc-polymorphism">Ad-hoc polymorphism</a></li><li><a href="#subtype-polymorphism">Subtype polymorphism</a></li></ul></li><li><a href="#associativity">Associativity</a></li></ul>
+</div>
+        </div>
+        
+        <div class="contents">
+            <main id="content" class="main-content" role="main">
+                <div class="partNav"><a href="./" title="CS141 Home">🏡CS141</a><a href="/dcs-notes.github.io/CS141/part2.html" title="Lazy Evaluation & Recursion">Next👉</a></div>
+                <!-- Main Content of markdown or sub-layouts-->
+                <!-- Each module has its own layout to allow module layouts to be customised -->
+<!-- The layout name is also used by the notes layout to display the correct module code -->
+
+<h2 id="imperative-vs-functional">Imperative vs Functional</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Imperative</th>
+      <th>Functional</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mutation of state</td>
+      <td>Reduction of expressions</td>
+    </tr>
+    <tr>
+      <td>Tell the computer how you want to do something</td>
+      <td>Tell the computer what you want to compute and let it work out how to do it</td>
+    </tr>
+    <tr>
+      <td>Statements executed in order specified</td>
+      <td>Sub-expressions can often be evaluated in an arbitrary order</td>
+    </tr>
+    <tr>
+      <td>Loops</td>
+      <td>Recursion</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="the-compiler">The Compiler</h2>
+
+<blockquote>
+  <p>Haskell is a statically typed functional programming language. This means that types are known at compile-time instead of run-time.</p>
+</blockquote>
+
+<p>This allows the GHC compiler to help us write better programs. When our code is compiling</p>
+
+<ul>
+  <li>It first goes through a parser that converts ASCII source code into data in memory.</li>
+  <li>Then the GHC checks types and infers missing ones.</li>
+  <li>Types are then <strong>erased</strong> after the type checking phase, and the compiler will generate binaries for the CPU to be able to run the program. (Types are not available at runtime – this is <strong>type erasure</strong>)</li>
+</ul>
+
+<h2 id="currying">Currying</h2>
+
+<blockquote>
+  <p>The process of applying arguments to a function one by one.</p>
+</blockquote>
+
+<p>Currying allows us to partially apply functions, which is very useful to e.g. define new functions in terms of partially-applied functions:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Lets say for some reason i want to add 5 to a lot of things</span>
+<span class="n">add</span> <span class="o">=</span> <span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="nf">\</span><span class="n">y</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="c1">-- We can define addFive with just add</span>
+<span class="n">addFive</span> <span class="o">=</span> <span class="n">add</span> <span class="mi">5</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<h3 id="uncurry">Uncurry</h3>
+
+<p>Contrastingly, there is a function <code class="language-plaintext highlighter-rouge">uncurry</code> that converts a curried function and converts it into a function on pairs.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">uncurry</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">c</span>
+</code></pre></div></div>
+
+<p>What this does it to make it more like function in mathematics, where arguments are taken together.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> 
+	<span class="c1">-- vs -- </span>
+<span class="n">f</span> <span class="o">=</span> <span class="nf">\</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="nf">\</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<h2 id="list-comprehension">List comprehension</h2>
+
+<p>The general syntax for list comprehension is</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">expression</span> <span class="o">|</span> <span class="n">generators</span><span class="o">-</span><span class="n">and</span><span class="o">-</span><span class="n">predicates</span><span class="p">]</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Variables introduced in the RHS of the list comprehension are in scope in the expression on the LHS. Additionally, variables from generators are in scope in later ones.</p>
+</blockquote>
+
+<p><strong>Example.</strong></p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">n</span><span class="o">*</span><span class="n">m</span> <span class="o">|</span> <span class="n">n</span> <span class="o">&lt;-</span> <span class="p">[</span><span class="mi">0</span><span class="o">..</span><span class="mi">2</span><span class="p">],</span> <span class="n">m</span> <span class="o">&lt;-</span> <span class="p">[</span><span class="mi">0</span><span class="o">..</span><span class="n">n</span><span class="p">]]</span> 
+<span class="o">=&gt;</span> <span class="p">[</span><span class="mi">0</span><span class="o">*</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">*</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span> 
+<span class="o">=</span>  <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Here we have two generators, <code class="language-plaintext highlighter-rouge">m &lt;- [0..n]</code> appears after <code class="language-plaintext highlighter-rouge">n &lt;- [0..4]</code>. Hence, the <code class="language-plaintext highlighter-rouge">n</code> is in scope in the generator <code class="language-plaintext highlighter-rouge">m &lt;- [0..n]</code>. Both <code class="language-plaintext highlighter-rouge">m</code> and <code class="language-plaintext highlighter-rouge">n</code> are also used in the expression, so they are in scope on the LHS.</p>
+
+<h2 id="type-classes">Type Classes</h2>
+
+<blockquote>
+  <p><strong>Type class constraints</strong> are used to restrict type variables to only types which support the functions or operators specified by the type class.</p>
+</blockquote>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Num</span> <span class="n">is</span> <span class="n">a</span> <span class="kr">type</span> <span class="kr">class</span> <span class="kr">in</span> <span class="n">the</span> <span class="kt">Standard</span> <span class="kt">Library</span>
+</code></pre></div></div>
+
+<p>Like names of types, type class names must start with an upper-case character.</p>
+
+<h3 id="type-class-definitions">Type Class Definitions</h3>
+
+<blockquote>
+  <p>In a <strong>type class definition</strong>, we define the <strong>method typings</strong> that an arbitrary type <code class="language-plaintext highlighter-rouge">a</code> <strong>must implement</strong> to be an <strong>instance</strong> of that type class.</p>
+</blockquote>
+
+<p><strong>Example.</strong></p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">class</span> <span class="kt">Num</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="n">abs</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="o">...</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Num</code> is the name of the type class we are defining.</p>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">a</code> is a type variable.</li>
+  <li>The definitions are the <strong>typing</strong> of the <strong>methods</strong> that a <code class="language-plaintext highlighter-rouge">Num</code> must adhere to.</li>
+</ul>
+
+<h3 id="type-instance">Type Instance</h3>
+
+<blockquote>
+  <p>When we <strong>define an instance</strong> of a type class, we have to <strong>adhere</strong> to the typing of the method(s) in the type class definition.</p>
+</blockquote>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">class</span> <span class="kt">Show</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="n">show</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">String</span>
+  
+<span class="kr">instance</span> <span class="kt">Show</span> <span class="kt">Bool</span> <span class="kr">where</span>
+  <span class="n">show</span> <span class="kt">True</span>  <span class="o">=</span> <span class="s">"True"</span>
+  <span class="n">show</span> <span class="kt">False</span> <span class="o">=</span> <span class="s">"False"</span>
+</code></pre></div></div>
+
+<p>In a Haskell module, there are a bunch of definitions of expressions. If we have a definition for something – we can refer to it by its name in the program. The Haskell compiler works out the <strong>typing</strong> for each definition is – when we use it it checks if the type is compatible with the expression.</p>
+
+<blockquote>
+  <p>Hence, we say that a <strong>type class</strong> brings <strong>function typings</strong> into scope.</p>
+</blockquote>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+<span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="o">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+<span class="n">abs</span> <span class="o">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Num a =&gt;</code> is a type class constraint.</li>
+</ul>
+
+<h4 id="constraints-on-instances">Constraints on instances</h4>
+
+<p>You can also place constraints on instances.</p>
+
+<p><strong>Example.</strong> Let’s say we want to define an instance of <code class="language-plaintext highlighter-rouge">Show</code> for pairs.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Show</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">show</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="o">???</span>
+</code></pre></div></div>
+
+<p>Because we are using polymorphic types <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code>, we obviously can’t pattern match on all possible values. Hence, the best way to do this is to place constraints that say both <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code> must be instances of <code class="language-plaintext highlighter-rouge">Show</code> themselves.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="p">(</span><span class="kt">Show</span> <span class="n">a</span><span class="p">,</span> <span class="kt">Show</span> <span class="n">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="kt">Show</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">show</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="s">"("</span> <span class="o">++</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="s">","</span> <span class="o">++</span> <span class="n">show</span> <span class="n">y</span> <span class="o">++</span> <span class="s">")"</span>
+</code></pre></div></div>
+
+<h3 id="superclass-constraints">Superclass Constraints</h3>
+
+<blockquote>
+  <p>Sometimes, certain type classes have a <strong>superclass constraint</strong> stating that a type must also be an instance of a <strong>superclass</strong> to be an instance of the <strong>current class.</strong></p>
+</blockquote>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">class</span> <span class="kt">Eq</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="o">&lt;</span><span class="p">)</span>  <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="p">(</span><span class="o">&lt;=</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="o">...</span>
+</code></pre></div></div>
+
+<ul>
+  <li>In order for <code class="language-plaintext highlighter-rouge">a</code> to be an instance of <code class="language-plaintext highlighter-rouge">Ord</code>, it must also be an instance of <code class="language-plaintext highlighter-rouge">Eq</code>.</li>
+</ul>
+
+<p>As a result, an <code class="language-plaintext highlighter-rouge">Ord</code> constraint on a function implies an <code class="language-plaintext highlighter-rouge">Eq</code> constraint</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">greaterOrEqual</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+<span class="n">greaterOrEqual</span> <span class="n">x</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span> <span class="o">||</span> <span class="n">x</span> <span class="o">==</span> <span class="n">y</span>
+</code></pre></div></div>
+
+<h2 id="polymorphism">Polymorphism</h2>
+
+<h3 id="parametric-polymorphism">Parametric polymorphism</h3>
+
+<blockquote>
+  <p>Allows us to reuse the same data structure for different types of elements. (Generics in Java)</p>
+</blockquote>
+
+<p><strong>Example of Parametric Polymorphism in Haskell</strong></p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- The identity function works on elements of any type</span>
+<span class="n">id</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+<span class="n">id</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+<span class="c1">-- Same as head function, works on lists that contain any type</span>
+<span class="n">head</span> <span class="o">::</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">a</span>
+<span class="n">head</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">xs</span><span class="p">)</span> <span class="o">=</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<h3 id="ad-hoc-polymorphism">Ad-hoc polymorphism</h3>
+
+<blockquote>
+  <p>A kind of polymorphism that is <strong>open</strong> to future extension.</p>
+</blockquote>
+
+<p>In Haskell, <strong>type class constraints</strong> is called ad-hoc polymorphism as you can define a function that works with a <strong>certain type class</strong> <code class="language-plaintext highlighter-rouge">K</code>, but does not necessarily work with any type just yet. In the future, as long as you define an instance of <code class="language-plaintext highlighter-rouge">K</code> for an arbitrary type, this function will accept/work with this arbitrary type.</p>
+
+<h3 id="subtype-polymorphism">Subtype polymorphism</h3>
+
+<p>A synonym of this is <a href="https://csrg-group.github.io/dcs-notes.github.io/CS118/part5.html#dynamic-polymorphism">dynamic polymorphism</a> in Java.</p>
+
+<h2 id="associativity">Associativity</h2>
+
+<blockquote>
+  <p><strong>Function</strong> associativity binds the strongest.</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Haskell</th>
+      <th style="text-align: center">Maths</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">f x * g y</code></td>
+      <td style="text-align: center"><em>f(x) × g(y)</em></td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="centeredtable">
+  <p>Function <strong>expressions</strong> associates to the right.</p>
+</blockquote>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">xor</span> <span class="o">=</span> <span class="nf">\</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="nf">\</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">||</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">not</span> <span class="p">(</span><span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">b</span><span class="p">)</span>
+<span class="c1">-- is the same as </span>
+<span class="n">xor</span> <span class="o">=</span> <span class="nf">\</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nf">\</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">||</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">not</span> <span class="p">(</span><span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">b</span><span class="p">))</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Function <strong>application</strong> associates to the left.</p>
+</blockquote>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">xor</span> <span class="kt">True</span> <span class="kt">True</span>
+<span class="c1">-- is the same as</span>
+<span class="p">(</span><span class="n">xor</span> <span class="kt">True</span><span class="p">)</span> <span class="kt">True</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Function <strong>types</strong> associates to the right.</p>
+</blockquote>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">xor</span> <span class="o">::</span> <span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+<span class="c1">-- is the same as </span>
+<span class="n">xor</span> <span class="o">::</span> <span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span>
+</code></pre></div></div>
+ 
+                
+                <footer class="site-footer">
+                    
+                    <span class="site-footer-owner"><a href="https://github.com/CSRG-Group/dcs-notes.github.io">dcs-notes.github.io</a> is maintained by <a href="https://github.com/CSRG-Group">CSRG-Group</a>.</span>
+                    
+                </footer>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

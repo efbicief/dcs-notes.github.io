@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+
+<head>
+
+    
+    <meta charset="UTF-8"><script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- Include tocNAV javascript -->
+    <script type="text/javascript" src="/dcs-notes.github.io/assets/js/tocNav.js"></script>
+
+    <!-- seo used to be here -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style"
+        type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/dcs-notes.github.io/assets/css/style.css">
+</head>
+
+<body>
+    <div id="mainGrid" class="container">
+        <header style="padding:10px;" class="page-header notes-header" role="banner">
+            <h1 class="project-name">Sequences and Series</h1>
+        </header>
+        <div title="Table of Contents" class="buttonCol" onclick="toggleNav()">
+            <div class="navArrow">
+                <i></i>
+            </div>
+        </div>
+        <div class="navBox">
+            <div id="sidenav" class="sideNav closedNav">
+                <h2 style="margin-left: 10px;">Table of Contents</h2><ul><li><a href="#sequences-and-series">Sequences and Series</a><ul><li><a href="#sequences">Sequences</a><ul><li><a href="#limits">Limits</a></li><li><a href="#convergent-sequences">Convergent sequences</a><ul><li><a href="#properties">Properties</a></li></ul></li><li><a href="#divergent-sequences">Divergent sequences</a></li><li><a href="#big-o">Big-O</a></li></ul></li><li><a href="#recurrences">Recurrences</a><ul><li><a href="#linear-recurrences">Linear recurrences</a><ul><li><a href="#homogeneous-recurrences">Homogeneous recurrences</a></li><li><a href="#non-homogeneous-recurrences">Non-homogeneous recurrences</a></li></ul></li></ul></li><li><a href="#series--notes-1-notes-2">Series  (Notes #1, Notes #2)</a><ul><li><a href="#geometric-series">Geometric series</a><ul><li><a href="#the-harmonic-series">The harmonic series</a></li></ul></li><li><a href="#properties-of-convergent-series">Properties of Convergent series</a></li><li><a href="#the-comparison-test">The comparison test</a></li><li><a href="#the-ratio-test">The ratio test</a></li><li><a href="#examples-of-series">Examples of series</a></li><li><a href="#radius-of-convergence">Radius of convergence</a></li><li><a href="#properties-of-power-series">Properties of power series</a></li><li><a href="#binomial-theorem">Binomial theorem</a></li><li><a href="#decimal-numbers-as-a-geometric-series">Decimal numbers as a geometric series</a></li><li><a href="#partial-fractions-optional">Partial fractions (optional)</a></li></ul></li></ul></li></ul>
+</div>
+        </div>
+        
+        <div class="contents">
+            <main id="content" class="main-content" role="main">
+                <div class="partNav"><a href="/dcs-notes.github.io/CS131/part2.html" title="Linear algebra and Matrices">👈Prev</a><a href="./" title="CS131 Home">🏡CS131</a><a href="/dcs-notes.github.io/CS131/part4.html" title="Calculus">Next👉</a></div>
+                <!-- Main Content of markdown or sub-layouts-->
+                <!-- Each module has its own layout to allow module layouts to be customised -->
+<!-- The layout name is also used by the notes layout to display the correct module code -->
+
+<h1 id="sequences-and-series">Sequences and Series</h1>
+
+<h2 id="sequences"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part3/note15.pdf">Sequences</a></h2>
+
+<p>A sequence \(a_n\) is an infinite list of numbers \(a_0, a_1, ...\)</p>
+
+<p>Types of sequences:</p>
+
+<ul>
+  <li>Bounded: \(L &lt; a_n &lt; U, \forall n\) (where \(L\) and \(U\) are the upper and lower limits respectively)</li>
+  <li>Increasing: \(a_n &lt; a_{n+1}, \forall n\)</li>
+  <li>Decreasing: \(a_n &gt; a_{n+1}, \forall n\)</li>
+</ul>
+
+<h3 id="limits">Limits</h3>
+
+<p>A sequence \(a_n\) is said to converge to a limit \(l \in \mathbb{R}\) if for every \(\epsilon &gt; 0\) there is an integer \(N\) (dependent on \(\epsilon\)) with \(\|a_n - l\| &lt; \epsilon\) for all \(n &gt; N\)</p>
+
+<ul>
+  <li>Intuitively, this means that it converges to a value if every item after the current one is “closer” to that value than the current one</li>
+</ul>
+
+<h3 id="convergent-sequences">Convergent sequences</h3>
+
+<p>The combination rules of limits of convergent sequences are as expected, summing, multiplying etc. as with normal numbers</p>
+
+<h4 id="properties">Properties</h4>
+
+<ol>
+  <li>Every convergent sequence has a unique (single) limit</li>
+  <li>If \(a_n\) converges to \(l\), then so does every subsequence of it</li>
+  <li>If \(a_n\) converges to \(l\), the \(\|a_n\|\) converges to \(\|l\|\)</li>
+  <li>The <strong>squeeze rule</strong>
+If \(a_n\) converges to \(l\), \(b_n\) converges to \(l\), and \(a_n \leq c_n \leq b_n, \forall n\), then \(c_n\) converges to \(l\)</li>
+  <li>A convergent sequence is bounded, if \(B&gt;0\) with \(-B \leq a_n \leq B, \forall n\)</li>
+  <li>Any increasing bounded above sequence converges</li>
+  <li>Any decreasing bounded below sequence converges</li>
+</ol>
+
+<h3 id="divergent-sequences">Divergent sequences</h3>
+
+<p>Don’t converge to a value</p>
+
+<h3 id="big-o">Big-O</h3>
+
+<p>See the <a href="../CS126/part2">CS126 notes on this topic</a> for a more comprehensive guide</p>
+
+<h2 id="recurrences"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part3/note16.pdf">Recurrences</a></h2>
+
+<p>Recurrences are sequences expressed in terms of their previous terms</p>
+
+<h3 id="linear-recurrences">Linear recurrences</h3>
+
+<h4 id="homogeneous-recurrences">Homogeneous recurrences</h4>
+
+<p>Consider the recurrence
+\(x_n + a x_{n-1} + b x_{n-2} = 0\)
+We then form an auxiliary equation from this
+\(\lambda^2 + a \lambda + b\)
+And solve for the roots \(\lambda_1\) and \(\lambda_1\). Then:</p>
+
+<ul>
+  <li>If \(\lambda_1 \neq \lambda_2\), the general solution is \(A (\lambda_1)^n + B (\lambda_1)^n\)</li>
+  <li>If \(\lambda_1 = \lambda_2\), the general solution is \(A (\lambda_1)^n + Bn (\lambda_1)^n\)</li>
+</ul>
+
+<p>With \(A\) and \(B\) being unknown constants</p>
+
+<h4 id="non-homogeneous-recurrences">Non-homogeneous recurrences</h4>
+
+<p>Consider the recurrence:
+\(x_n + a x_{n-1} + b x_{n-2} = f(n)\)
+First, we let \(f(n)=0\), and solve the recurrence using the technique for homogeneous recurrences shown above. Let this general solution be denoted as \(h_n\)</p>
+
+<p>Then, we also need to find <em>any</em> particular solution for the original recurrence. This will normally be a polynomial - and if one substitution doesn’t work, we can try one of a higher order</p>
+
+<ul>
+  <li>For example, try substituting \(x_n = Cn + D\) (and hence \(x_{n-1} = C(n-1) + D\) and so on), which we call \(p_n\), and solve for \(C\) and \(D\)</li>
+</ul>
+
+<p>Then, the general solution to the recurrence is \(x_n = h_n + p_n\)</p>
+
+<h2 id="series--notes-1-notes-2">Series  (<a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part3/note17_part1.pdf">Notes #1</a>, <a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part3/note17_part2.pdf">Notes #2</a>)</h2>
+
+<p>A series \(\sum a_n\) is a pair of sequences, composed from</p>
+
+<ol>
+  <li>
+    <p>A sequence of terms, \(a_n\)</p>
+  </li>
+  <li>
+    <p>A sequence of partial sums \(s_n\) defined as:
+\(s_n = a_0 + a_1 + ... + a_n\)</p>
+  </li>
+</ol>
+
+<p>If the sequence \(s_n\) converges, we say that  \(\sum a_n\) converges to the sum \(s\), and can write:
+\(\sum_{n=0}^{\infin} a_n = s\)</p>
+
+<h3 id="geometric-series">Geometric series</h3>
+
+<p>A series of the form \(\sum r^n\)</p>
+
+<p>It converges for:
+\(\sum_{n=0}^{\infin} r^n = \frac{1}{1-r}, \quad \|r\| &lt; 1\)
+And diverges for \(\|r\| \geq 1\)</p>
+
+<h4 id="the-harmonic-series">The harmonic series</h4>
+
+<p>The harmonic series \(\sum_{n=1}^{\infin} \frac{1}{n}\) diverges</p>
+
+<h3 id="properties-of-convergent-series">Properties of Convergent series</h3>
+
+<ol>
+  <li><strong>Sum rule</strong>: \(\sum a_n + \sum b_n = \sum (a_n + b_n)\)</li>
+  <li><strong>Multiple rule</strong>: \(\sum \lambda a_n = \lambda \cdot \sum a_n\)</li>
+  <li>If the series \(\sum a_n\) converges, then the sequence \(a_n\) also converges to \(0\)</li>
+  <li>If the series \(\sum \|a_n\|\) converges, then the   series \(\sum a_n\) also converges</li>
+</ol>
+
+<h3 id="the-comparison-test">The comparison test</h3>
+
+<p>Suppose that \(0 \leq a_n \leq b_n, \forall n\)</p>
+
+<ol>
+  <li>If \(\sum b_n\) converges, then so does \(\sum a_n\)</li>
+  <li>If \(\sum a_n\) diverges, then so does \(\sum b_n\)</li>
+</ol>
+
+<h3 id="the-ratio-test">The ratio test</h3>
+
+<p>If \(\|\frac{a_{n+1}}{a_n}\| \rightarrow L\) then</p>
+
+<ol>
+  <li>If \(0 \leq L &lt; 1\) then the series \(\sum a_n\) converges</li>
+  <li>If \(L &gt; 1\) then the series \(\sum a_n\) diverges</li>
+  <li>If \(L=1\), the test is inconclusive</li>
+</ol>
+
+<h3 id="examples-of-series">Examples of series</h3>
+
+<p><em>Pull request if you want to complete this</em></p>
+
+<h3 id="radius-of-convergence">Radius of convergence</h3>
+
+<p>Intuitively the range of values for which the sequence converges</p>
+
+<h3 id="properties-of-power-series">Properties of power series</h3>
+
+<p><em>Pull request if you want to complete this</em></p>
+
+<h3 id="binomial-theorem">Binomial theorem</h3>
+
+<p><em>Pull request if you want to complete this</em></p>
+
+<h3 id="decimal-numbers-as-a-geometric-series"><a href="https://warwick.ac.uk/fac/sci/dcs/teaching/material/cs131/part3/note18.pdf">Decimal numbers as a geometric series</a></h3>
+
+<p><em>Pull request if you want to complete this</em></p>
+
+<h3 id="partial-fractions-optional">Partial fractions (optional)</h3>
+
+<p><em>Pull request if you want to complete this</em></p>
+
+
+                
+                <footer class="site-footer">
+                    
+                    <span class="site-footer-owner"><a href="https://github.com/CSRG-Group/dcs-notes.github.io">dcs-notes.github.io</a> is maintained by <a href="https://github.com/CSRG-Group">CSRG-Group</a>.</span>
+                    
+                </footer>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>
